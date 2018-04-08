@@ -1,0 +1,66 @@
+﻿@model IEnumerable<RandomRestaraunt.Data.Models.Restaraunt>
+
+<div class="roulette_container">
+    <div class="roulette" style="display:none; max-height: 100%;">
+        @foreach (var restaraunt in Model)
+        {
+            if (restaraunt.Image != null)
+            {
+                <img src="data:image;base64,@System.Convert.ToBase64String(restaraunt.Image)" />
+            }
+            else
+            {
+                <img src="@restaraunt.ImageUrl" />
+            }
+        }
+    </div>
+</div>
+
+<style>
+    img {
+        max-width: 100%;
+        max-height: 300px;
+        min-height: 300px;
+        margin: 0 auto;
+    }
+
+    .roulette_container {
+        background-color: white;
+        width: 80%;
+        height: 300px;
+        margin: auto;
+        cursor:pointer;
+    }
+
+    .roulette-inner {
+        height: 300px;
+    }
+</style>
+
+<script>
+    var restarauntCount = @Model.Count();
+    var running = false;
+    $(function () {
+        $('.roulette').find('img').hover(function () {
+            console.log($(this).height());
+        });
+        var p = {
+            speed: 10,
+            duration: 3,
+            stopImageNumber: -1,
+            startCallback: function () {
+                running = true;
+            },
+            stopCallback: function ($stopElm) {
+                running = false;
+            }
+        }
+        var rouletter = $('div.roulette');
+        rouletter.roulette(p);
+        $('.roulette_container').click(function () {
+            if (!running) {
+                rouletter.roulette('start');
+            }
+        });
+    });
+</script>
